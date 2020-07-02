@@ -1,6 +1,6 @@
 // 생성자 함수를 이용하여 새로운 객체를 만들어 내는 방법
 
-//r객체
+//객체
 function Person(name, age) {
     console.log(this);
     this.name = name;
