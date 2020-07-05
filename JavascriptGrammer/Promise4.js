@@ -20,7 +20,8 @@ r().then( (msg) => { // 위의 함수를 성공적으로 완료할시 then 실�
 
 
 //Promise 가 없었을 때 비동기 작업을 했던 방식
-// callback의 반복
+// Promise, async를 사용하지 않을 시 발생하는 문제
+// callback의 재귀
 
 function c(callback) {
     setTimeout(() => {
@@ -34,12 +35,13 @@ c(() => {
 c(() => {
     c(() => {
         c(() => {
-            console.log("3000ms 후에 callback 함수가 실행됩니다."); //callback 안의 callbac
+            console.log("3000ms 후에 callback 함수가 실행됩니다."); //callback 안의 callback
         });
     });
 });
 
 //위 callback 방식을 다시 pomise로 바꾸면?
+// 보기 쉽게 top down 방식으로 프로그램이 실행됨.
 function p() {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
