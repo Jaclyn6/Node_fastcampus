@@ -22,8 +22,7 @@ async function login(event) {
         if ( token === undefined ) {
             return;
         }
-
-        localStorage.setItem('toekn',token); //token을 저장
+        localStorage.setItem('token',token); //token을 저장
         location.assign('/');
     } catch (error) {
         const data = error.response.data;

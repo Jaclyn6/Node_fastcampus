@@ -21,7 +21,7 @@ async function logout() {
       localStorage.clear();
       location.assign('/login');
     }
-  }
+}
 
 function getToken() {
     console.log(localStorage.getItem('token'));
@@ -139,7 +139,7 @@ async function main() {
     }
 
     // 나의 책을 서버에서 받아오기
-    const books = await getbooks(token);
+    const books = await getBooks(token);
     if (books === null) {
         return;
     }

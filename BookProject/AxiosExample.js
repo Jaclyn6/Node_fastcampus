@@ -10,3 +10,4 @@ const res = await axios.post('https://api.marktube.tv/v1/me', {
     password,
 });
 
+console.log('a');
