@@ -1,0 +1,17 @@
+{
+  "name": "npmtest",
+  "version": "1.0.0",
+  "description": "node online, npm init으로 생성",
+  "main": "index.js",
+  "scripts": {
+    "start" : "npx nodemon nodemon.js",
+    "dev" : "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "jaclyn",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "uuid4": "^2.0.2"
+  }
+}
