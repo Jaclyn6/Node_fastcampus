@@ -1,3 +1,24 @@
-products // html 파일이 변경되었을 때 자동으로 반영되게 하려면 nodemon -e js,html app.js 로 실행하면 된다.
-{{ message }}
-{{ online }}
+{% set title = "관리자 리스트" %}
+{% extends "layout/base.html" %}
+
+{% block content -%}
+    <table class="table table-bordered table-hover">
+        <tr>
+            <th>제목</th>
+            <th>작성일</th>
+            <th>삭제</th>
+        </tr>
+        <tr>
+            <td>제품 이름</td>
+            <td>
+                2020-03-07
+            </td>
+            <td>
+                <a href="#" class="btn btn-danger">삭제</a>
+            </td>
+        </tr>
+    </table>
+
+    <a href="/admin/products/write" class="btn btn-default">작성하기</a>
+
+{% endblock %} 
