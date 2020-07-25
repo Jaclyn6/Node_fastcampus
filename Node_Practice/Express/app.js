@@ -22,8 +22,8 @@ app.use(logger('dev'));
 app.use('/static', express.static('uploads'));  //첫번째 인자는 접근할 url 명, 두번째 인자는 정적파일 폴더명
 
 //Global view 변수
-app.use( (req,res,next) => { 
-    app.locals.isLogin = true;
+app.use( (req,res,next) => {  // 경로 지정을 안해놓읗면 어떤 url을 타든 이 미들웨어를 거치도록 함
+    app.locals.isLogin = true; //사용하는 이유 : 템플릿 어디서든 isLogin 값에 접근 할 수 있음 (예시는 base.html 참고)
     next();
 });
 
@@ -35,7 +35,7 @@ app.use(bodyParser.urlencoded({ extended : false }) );
 app.use('/admin', firstMiddleware,admin);  
 app.use('/contacts', contacts);
 
-app.get('/', (req, res) => {s
+app.get('/', (req, res) => {
     res.send('Hello Express');
 });
 

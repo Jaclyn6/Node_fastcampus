@@ -9,7 +9,12 @@
 </head>
 <body>
     <div class="container" style="padding-top:100px;">
-
+        <!-- global view 변수 로그인이 되어있을때나 안되어있을 때 처리를 해줄 수 잇음-->
+        {% if isLogin %} 
+            로그인 중
+        {% else %}
+            로그인이 안되어 있음
+        {% endif %}
         {% block content %}{% endblock %}
 
     </div>    
