@@ -9,14 +9,27 @@
 </head>
 <body>
     <div class="container" style="padding-top:100px;">
-        <!-- global view 변수 로그인이 되어있을때나 안되어있을 때 처리를 해줄 수 잇음-->
-        {% if isLogin %} 
-            로그인 중
-        {% else %}
-            로그인이 안되어 있음
-        {% endif %}
-        {% block content %}{% endblock %}
-
+        <nav class="navbar navbar-inverse"> 
+            <div class="container-fluid"> 
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-9">
+                    <ul class="nav navbar-nav">
+                        
+                         {% from "macro/link.html" import link %} <!-- link 라는 매크로 함수를 link.html에서 받아옴 -->
+                        {{ link( '/admin/products' , "List" , req_path ) }} <!-- 인자값 넣어서 함수 실행 -->
+                        {{ link( '/admin/products/write' , "Write" , req_path ) }}
+               
+                    
+                        <!-- 
+                        <li class="active"> active가 설정되어 있으면 눌려있는 효과가 나타남
+                            <a href="/admin/products">List</a>
+                        </li>
+                        <li><a href="/admin/products/write">Write</a></li> -->
+                        
+                    </ul> 
+                </div> 
+            </div> 
+        </nav>
     </div>    
 </body>
 </html> 
+

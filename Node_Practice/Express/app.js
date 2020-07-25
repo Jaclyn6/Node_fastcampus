@@ -24,8 +24,10 @@ app.use('/static', express.static('uploads'));  //첫번째 인자는 접근할 
 //Global view 변수
 app.use( (req,res,next) => {  // 경로 지정을 안해놓읗면 어떤 url을 타든 이 미들웨어를 거치도록 함
     app.locals.isLogin = true; //사용하는 이유 : 템플릿 어디서든 isLogin 값에 접근 할 수 있음 (예시는 base.html 참고)
+    app.locals.req_path = req.path; //현재 url을 req_path에 담아서 template에 전달
     next();
 });
+
 
 // 미들웨어 내 bodyparser 설정
 app.use(bodyParser.json()); 
