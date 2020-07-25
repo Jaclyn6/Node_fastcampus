@@ -1,65 +1,93 @@
-const express = require('express'); //express 설정
-const admin = require('./routes/admin'); //routing 설정
-const contacts = require('./routes/contacts'); //routing 설정
-const logger = require('morgan'); // 로깅 설정
-const nunjucks = require('nunjucks'); // template 설정
-const bodyParser = require('body-parser'); //post 요청 받는 body parser - express 에 내장
+const express = require('express');
+const nunjucks = require('nunjucks');
+const logger = require('morgan');
+const bodyParser = require('body-parser');
 
 
-const app = express();
-const port = 3000;
+class App {
 
-nunjucks.configure('template', {
-    autoescape : true, //html entity escape
-    express : app // express() 객체 변수 명(여기서는 app)
-})
+    constructor () {
+        this.app = express();
+        
+        // 뷰엔진 셋팅
+        this.setViewEngine();
 
-//미들웨어 세팅
-// Access log 설정
-app.use(logger('dev'));
+        // 미들웨어 셋팅
+        this.setMiddleWare();
 
-// Express 정적파일 세팅
-app.use('/static', express.static('uploads'));  //첫번째 인자는 접근할 url 명, 두번째 인자는 정적파일 폴더명
+        // 정적 디렉토리 추가
+        this.setStatic();
 
-//Global view 변수
-app.use( (req,res,next) => {  // 경로 지정을 안해놓읗면 어떤 url을 타든 이 미들웨어를 거치도록 함
-    app.locals.isLogin = true; //사용하는 이유 : 템플릿 어디서든 isLogin 값에 접근 할 수 있음 (예시는 base.html 참고)
-    app.locals.req_path = req.path; //현재 url을 req_path에 담아서 template에 전달
-    next();
-});
+        // 로컬 변수
+        this.setLocals();
+
+        // 라우팅
+        this.getRouting();
+
+        // 404 페이지를 찾을수가 없음
+        this.status404();
+
+        // 에러처리
+        this.errorHandler();
 
 
-// 미들웨어 내 bodyparser 설정
-app.use(bodyParser.json()); 
-app.use(bodyParser.urlencoded({ extended : false }) );
+    }
 
-//routing 설정
-app.use('/admin', firstMiddleware,admin);  
-app.use('/contacts', contacts);
 
-app.get('/', (req, res) => {
-    res.send('Hello Express');
-});
+    setMiddleWare (){
+        
+        // 미들웨어 셋팅
+        this.app.use(logger('dev'));
+        this.app.use(bodyParser.json());
+        this.app.use(bodyParser.urlencoded({ extended: false }));
 
-app.get('/fastcampus', (req, res) => {
-    res.send('Hello Fastcampus11');
-});
+    }
 
-function firstMiddleware(req, res, next) {
-    console.log("최우선 미들웨어");
-    next();
+    setViewEngine (){
+
+        nunjucks.configure('template', {
+            autoescape: true,
+            express: this.app
+        });
+
+    }
+
+
+    setStatic (){
+        this.app.use('/uploads', express.static('uploads'));
+    }
+
+    setLocals(){
+
+        // 템플릿 변수
+        this.app.use( (req, res, next) => {
+            this.app.locals.isLogin = true; //this를 없애서 500 에러 테스트 할 수 있음
+            this.app.locals.req_path = req.path;
+            next();
+        });
+
+    }
+
+    getRouting (){
+        // controllers가 폴더라면 내부의 index.js를 require 함
+        this.app.use(require('./controllers')) 
+    }
+
+    status404() {        
+        this.app.use( ( req , res, _ ) => {
+            res.status(404).render('common/404.html')
+        });
+    }
+
+    errorHandler() {
+
+        this.app.use( (err, req, res,  _ ) => {
+            console.log(err);
+            res.status(500).render('common/500.html')
+        });
+    
+    }
+
 }
 
-// 404 에러 미들웨어 설정, 일반적으로 에러 처리는 미들웨어 중 마지막에 설정해줌
-app.use( (req,res, _) => { //사용하지 않는 변수는 _로 처리해줌(여기서는 next) =약속 
-    res.status(400).render('common/404.html'); //res status가 400번대 일 경우 404.html 출력
-});
-
-// 500 에러 미들웨어 설정, 일반적으로 에러 처리는 미들웨어 중 마지막에 설정해줌
-app.use( (req,res, _) => { //사용하지 않는 변수는 _로 처리해줌(여기서는 next) =약속 
-    res.status(500).render('common/500.html'); //res status가 400번대 일 경우 404.html 출력
-});
-
-app.listen(port, () => {
-    console.log("Express Listening on port", port);
-});
+module.exports = new App().app;
