@@ -48,8 +48,15 @@ function firstMiddleware(req, res, next) {
     next();
 }
 
+// 404 에러 미들웨어 설정, 일반적으로 에러 처리는 미들웨어 중 마지막에 설정해줌
+app.use( (req,res, _) => { //사용하지 않는 변수는 _로 처리해줌(여기서는 next) =약속 
+    res.status(400).render('common/404.html'); //res status가 400번대 일 경우 404.html 출력
+});
 
-
+// 500 에러 미들웨어 설정, 일반적으로 에러 처리는 미들웨어 중 마지막에 설정해줌
+app.use( (req,res, _) => { //사용하지 않는 변수는 _로 처리해줌(여기서는 next) =약속 
+    res.status(500).render('common/500.html'); //res status가 400번대 일 경우 404.html 출력
+});
 
 app.listen(port, () => {
     console.log("Express Listening on port", port);
